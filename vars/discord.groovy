@@ -1,10 +1,6 @@
 import groovy.json.JsonOutput
 import hudson.model.*
 
-def call(message) {
-    echo "Hallo World"
-}
-/*
 def createMessage(title,status,fields,url,content = null){
 
 def color = 16711680
@@ -41,4 +37,4 @@ def sendFile(file,hook){
 def halloWorld(){
     echo "Hallo World"
 }
-*/
+
