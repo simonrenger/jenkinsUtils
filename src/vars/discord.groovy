@@ -1,10 +1,8 @@
 import groovy.json.JsonOutput
 import hudson.model.*
 
-def call(Closure body) {
-    node {
-        body()
-    }
+def call(message) {
+    echo "Hallo World"
 }
 /*
 def createMessage(title,status,fields,url,content = null){
