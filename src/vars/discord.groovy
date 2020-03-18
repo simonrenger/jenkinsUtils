@@ -33,3 +33,7 @@ def send(str,hook){
 def sendFile(file,hook){
        bat label: 'sendFileViaDiscord', script: "curl -F \"file=@${file}\" ${hook}" 
 }
+
+def halloWorld(){
+    echo "Hallo World"
+}
