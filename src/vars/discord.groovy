@@ -37,3 +37,7 @@ def sendFile(file,hook){
 def halloWorld(){
     echo "Hallo World"
 }
+
+def call(){
+    echo "88"
+}
