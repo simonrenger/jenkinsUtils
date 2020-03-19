@@ -43,7 +43,7 @@ def upDown(user,ticket,swarm_url,review){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
 }
 
-def swamUrl(credential,client,mapping){
+def swarmUrl(credential,client,mapping){
     def p4s = p4(credential: credential, workspace: manualSpec(charset: 'none', cleanup: false, name: client, pinHost: false, spec: clientSpec(allwrite: true, backup: true, changeView: '', clobber: false, compress: false, line: 'LOCAL', locked: false, modtime: false, rmdir: false, serverID: '', streamName: '', type: 'WRITABLE', view: mapping)))
     def prop = p4s.run("property","-l","-n","P4.Swarm.URL")
     for(def item : prop) {
