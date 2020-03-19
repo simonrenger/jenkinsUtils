@@ -34,7 +34,7 @@ def withTicket(credentials,p4Port,Closure body){
 def withSwarmUrl(credentials,client,mapping,Closure body){
         withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'p4USERPASS', usernameVariable: 'p4USER' )]) {
             def url = swarmUrl(credentials,client,mapping)
-            body(url,env.prUser,env.p4USERPASS)
+            body(url,env.p4User,env.p4USERPASS)
         }
 }
 
