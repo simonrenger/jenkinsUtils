@@ -31,6 +31,13 @@ def withTicket(credentials,p4Port,Closure body){
     body(p4Ticket)
 }
 
+def withSwarmUrl(credentials,client,mapping,Closure body){
+        withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'p4USERPASS', usernameVariable: 'p4USER' )]) {
+            def url = swarmUrl(credentials,client,mapping)
+            body(url,env.prUser,env.p4USERPASS)
+        }
+}
+
 def comment(review,user,ticket,swarm_url,comment){
     bat label: 'send comment request', script: "curl -u \"${user}:${ticket}\" -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"topic=reviews/${review}&body=${comment}\" \"${swarm_url}/api/v9/comments\""
 }
