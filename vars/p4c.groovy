@@ -13,3 +13,38 @@ def getChangelistDescription(id,credential,client,view_mapping){
 	}
 	return desc
 }
+
+def ticket(credentials,p4Port){
+    def ticket = ""
+    withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'USERPASS', usernameVariable: 'USER' )]) {
+    bat label: '', script: "echo %USERPASS%| p4 -p ${p4Port} -u %USER% trust -y"  
+    def status = bat(label: 'request ticket', script: "echo %USERPASS%| p4 -p ${p4Port} -u %USER% login -ap", returnStdout: true)
+    echo "status: ${status}"
+    def tickets = status.split('\n')
+    ticket = tickets[tickets.length-1]
+    }
+    return ticket
+}
+
+def withTicket(credentials,p4Port,Closure body){
+    def p4Ticket = ticket(credentials,p4Port)
+    body(p4Ticket)
+}
+
+def comment(review,credentials,swarm_url,p4Port,comment){
+    withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'USERPASS', usernameVariable: 'USER' )]) {
+        commentWithTicket(review,env.USER,ticket(credentials,p4Port),swarm_url,comment)
+    }
+}
+
+def commentWithTicket(review,user,ticket,swarm_url,comment){
+    bat label: 'send comment request', script: "curl -u \"${user}:${ticket}\" -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"topic=reviews/${review}&body=${comment}\" \"${swarm_url}/api/v9/comments\""
+}
+
+def upVote(user,ticket,swarm_url,review){
+    bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/up\" "
+}
+
+def upDown(user,ticket,swarm_url,review){
+    bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
+}
