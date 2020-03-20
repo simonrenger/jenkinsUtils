@@ -42,11 +42,11 @@ def comment(review,user,ticket,swarm_url,comment){
     bat label: 'send comment request', script: "curl -u \"${user}:${ticket}\" -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"topic=reviews/${review}&body=${comment}\" \"${swarm_url}/api/v9/comments\""
 }
 
-def upVote(user,ticket,swarm_url,review){
+def upVote(review,user,ticket,swarm_url){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/up\" "
 }
 
-def upDown(user,ticket,swarm_url,review){
+def upDown(review,user,ticket,swarm_url){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
 }
 
