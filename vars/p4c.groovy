@@ -85,3 +85,12 @@ def swarmUrl(credential,client,mapping){
     }
     return ""
 }
+
+// just a workaround till the plugin is enabled
+def reviewObject(){
+    if(params.json != null){
+    def jsonSlurper = new JsonSlurper()
+    return jsonSlurper.parseText(params.json)
+    }
+    return [change:null,review:null,pass:null,status:null,fail:null]
+}
