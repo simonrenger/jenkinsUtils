@@ -50,6 +50,28 @@ def downVote(review,user,ticket,swarm_url){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
 }
 
+def approve(review,user,ticket,swarm_url){
+    updateState(review,user,ticket,swarm_url,"approved")
+}
+
+def needsReview(review,user,ticket,swarm_url){
+    updateState(review,user,ticket,swarm_url,"needsReview")
+}
+def needsRevision(review,user,ticket,swarm_url){
+    updateState(review,user,ticket,swarm_url,"needsRevision")
+}
+def archive(review,user,ticket,swarm_url){
+    updateState(review,user,ticket,swarm_url,"archived")
+}
+def reject(review,user,ticket,swarm_url){
+    updateState(review,user,ticket,swarm_url,"rejected")
+}
+
+def updateState(review,user,ticket,swarm_url,state){
+    bat label: 'update state', script: "curl -u \"${user}:${ticket}\" -X PATCH  -H \"Content-Type: application/x-www-form-urlencoded\" -d \"state=${state}\" \"${swarm_url}/api/v9/reviews/${review}/state/\""
+}
+
+
 def swarmUrl(credential,client,mapping){
     def p4s = p4(credential: credential, workspace: manualSpec(charset: 'none', cleanup: false, name: client, pinHost: false, spec: clientSpec(allwrite: true, backup: true, changeView: '', clobber: false, compress: false, line: 'LOCAL', locked: false, modtime: false, rmdir: false, serverID: '', streamName: '', type: 'WRITABLE', view: mapping)))
     def prop = p4s.run("property","-l","-n","P4.Swarm.URL")
