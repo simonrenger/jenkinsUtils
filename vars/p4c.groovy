@@ -46,7 +46,7 @@ def upVote(review,user,ticket,swarm_url){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/up\" "
 }
 
-def upDown(review,user,ticket,swarm_url){
+def downVote(review,user,ticket,swarm_url){
     bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
 }
 
