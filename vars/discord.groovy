@@ -7,6 +7,8 @@ def color = 16711680
 
 if ( status == "ok"){
     color = 65280
+}else if(status == "new"){
+    color = "359360"
 }
 
 def  body = [embeds: 
