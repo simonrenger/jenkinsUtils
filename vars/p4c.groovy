@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+
 def getChangelistDescription(id,credential,client,view_mapping){
     def p4s = p4(credential: credential, workspace: manualSpec(charset: 'none', cleanup: false, name: client, pinHost: false, spec: clientSpec(allwrite: false, backup: true, changeView: '', clobber: false, compress: false, line: 'LOCAL', locked: false, modtime: false, rmdir: false, serverID: '', streamName: '', type: 'WRITABLE', view: view_mapping)))
     def list = p4s.run('describe', '-s', '-S', "${id}")
@@ -93,4 +94,10 @@ def reviewObject(){
     return jsonSlurper.parseText(params.json)
     }
     return [change:null,review:null,pass:null,status:null,fail:null]
+}
+
+
+
+def pull(credential,workspace_template){
+    p4sync charset: 'none', credential:credential, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
 }
