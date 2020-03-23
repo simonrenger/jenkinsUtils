@@ -30,8 +30,8 @@ def body = [
     }
 
     def bodyJson = JsonOutput.toJson(body).replace('"','""')
-    bat label: '', script: """curl --location --request PATCH \'${url_}/api/rest/issues/${id}\'^
-    --header \'Authorization: ${token_}\'^
-    --header \'Content-Type: application/json\' ^
+    bat label: '', script: """curl --location --request PATCH \"${url_}/api/rest/issues/${id}\"^
+    --header \"Authorization: ${token_}\"^
+    --header \"Content-Type: application/json\" ^
     --data-raw \"${bodyJson}\""""
 }
