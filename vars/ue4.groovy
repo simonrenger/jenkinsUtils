@@ -14,5 +14,5 @@ def build(ue4_dir,project,project_name,platform,config,output_dir){
 }
 
 def listTests(platform,project){
-    bat label: 'list all tests', script:"CALL \"${engineRoot}Engine\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation List;quit\""
+    bat label: 'list all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation List;quit\""
 }
