@@ -11,7 +11,7 @@ def setToken(token){
     token_ = token
 }
 
-def update(id,status,resolution,handler){
+def update(id,status,resolution,handler = null){
 
 def body = [
     id: id,
@@ -23,7 +23,7 @@ def body = [
     ]
 ]
 
-    if(status == "assigned"){
+    if(status == "assigned" && handler != null){
         body.handler = [
             name: handler
         ]
