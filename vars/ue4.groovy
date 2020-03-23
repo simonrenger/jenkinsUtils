@@ -4,6 +4,10 @@ def setRoot(root){
     engineRoot = root
 }
 
+def root(){
+    return engineRoot
+}
+
 def pack(ue4_dir,project,platform,config,output_dir){
     bat label: 'Exec Package', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\RunUAT.bat\" BuildCookRun -project=\"${project}\" -noP4 -Distribution -TargetPlatform=${platform} -Platform=${platform} -ClientConfig=${config} -ServerConfig=${config} -Cook -allmaps -Build -Stage -Pak -Archive -archivedirectory=\"${output_dir}\" -Rocket -Prereqs -Package"
 }
