@@ -18,7 +18,7 @@ def appManifest(appId,depotNumber,outputdir,steamBranch,isPreview="0",contentroo
     app_manifest = app_manifest.replace('[STEAM_BRANCH]',steamBranch)
     app_manifest = app_manifest.replace('[OUTPUT_DIR]',outputdir)
     app_manifest = app_manifest.replace('[CONTENT_ROOT]',contentroot)
-    app_manifest = app_manifest.replace('[STEAM_DEPO_NUMBER]',depotNumber)
+    app_manifest = app_manifest.replace('[STEAM_DEPOT_NUMBER]',depotNumber)
     writeFile file: "app_build_${appId}.vdf", text: app_manifest
 }
 

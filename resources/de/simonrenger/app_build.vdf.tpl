@@ -6,7 +6,7 @@
 	// The description for this build.
 	// The description is only visible to you in the 'Your Builds' section of the App Admin panel.
 	// This can be changed at any time after uploading a build on the 'Your Builds' page.
-	"desc" "[JOB_BASE_NAME} (Build {BUILD_NUMBER})"
+	"desc" "[JOB_BASE_NAME] (Build [BUILD_NUMBER])"
 
 	// Enable/Disable whether this a preview build.
 	// It's highly recommended that you use preview builds while doing the initially setting up SteamPipe to
