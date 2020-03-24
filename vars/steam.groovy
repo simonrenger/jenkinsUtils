@@ -9,7 +9,7 @@ def depotManifest(depotNumber,contentRoot,localPath="*",depotPath=".",recursive=
     writeFile file: "depot_build_${depotNumber}.vdf", text: depot_manifest
 }
 
-def appManifest(appId,depotNumber,outputdir,steamBranch,isPreview=0,contentroot=""){
+def appManifest(appId,depotNumber,outputdir,steamBranch,isPreview="0",contentroot=""){
     def app_manifest = libraryResource 'de/simonrenger/app_build.vdf.tpl'
     app_manifest.replaceAll('[STEAM_APP_ID]',appId)
     app_manifest.replaceAll('[JOB_BASE_NAME]',JOB_NAME)
