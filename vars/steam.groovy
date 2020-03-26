@@ -26,6 +26,6 @@ def appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdi
 
 def deploy(credentials,appManifest){
     withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'STEAMCMD_PASSWORD', usernameVariable: 'STEAMCMD_USERNAME')]) {
-        bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${${appManifest}}\" +quit"
+        bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${appManifest}\" +quit"
     }
 }
