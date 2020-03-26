@@ -7,6 +7,7 @@ def depotManifest(depotNumber,contentRoot,localPath="*",depotPath=".",recursive=
     depot_manifest = depot_manifest.replace('[STEAM_DEPOT_RECURSIVE]',recursive)
     depot_manifest = depot_manifest.replace('[STEAM_DEPOT_EXCLUDE]',exclude)
     writeFile file: "depot_build_${depotNumber}.vdf", text: depot_manifest
+    return "depot_build_${depotNumber}.vdf"
 }
 
 def appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdir="output"){
@@ -20,6 +21,7 @@ def appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdi
     app_manifest = app_manifest.replace('[CONTENT_ROOT]',contentroot)
     app_manifest = app_manifest.replace('[STEAM_DEPOT_NUMBER]',depotNumber)
     writeFile file: "app_build_${appId}.vdf", text: app_manifest
+    return "app_build_${appId}.vdf"
 }
 
 def deploy(credentials,appManifest){
