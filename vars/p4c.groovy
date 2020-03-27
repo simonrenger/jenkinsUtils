@@ -98,6 +98,6 @@ def reviewObject(){
 
 
 
-def pull(credential,workspace_template){
-    p4sync charset: 'none', credential:credential, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
+def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
+    p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
 }
