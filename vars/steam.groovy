@@ -24,8 +24,20 @@ def appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdi
     return "app_build_${appId}.vdf"
 }
 
-def deploy(credentials,appManifest){
+def login(){
+    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
+                        parameters: [
+                        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')]
+                        return INPUT_PARAMS
+}
+
+
+def deploy(credentials,appManifest,steamGuard = null){
     withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'STEAMCMD_PASSWORD', usernameVariable: 'STEAMCMD_USERNAME')]) {
-        bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${appManifest}\" +quit"
+        if(steamGuard == null){
+            bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${appManifest}\" +quit"
+        }else{
+             bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" \"${steamGuard}\"  +run_app_build_http \"${appManifest}\" +quit"
+        }
     }
 }
