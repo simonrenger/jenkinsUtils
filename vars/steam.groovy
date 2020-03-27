@@ -30,8 +30,8 @@ def setup(sourceDir = "..\\",installDir = "..\\steamcmd"){
     sourceDir = "${env.workspace}\\${sourceDir}"
     installDir ="${env.workspace}\\${installDir}"
     if(!fileExists("${sourceDir}steamcmd.zip")){
-        powershell label: 'Download SteamCMD', script: "Invoke-WebRequest http://media.steampowered.com/installer/steamcmd.zip -O ${sourceDir}steamcmd.zip"
-        powershell label: 'Unzip SteamCMD', script: "Expand-Archive -LiteralPath ${sourceDir}steamcmd.zip -DestinationPath ${installDir}"
+        powershell label: 'Download SteamCMD', script: "Invoke-WebRequest http://media.steampowered.com/installer/steamcmd.zip -O '${sourceDir}steamcmd.zip'"
+        powershell label: 'Unzip SteamCMD', script: "Expand-Archive -LiteralPath '${sourceDir}steamcmd.zip' -DestinationPath '${installDir}'"
     }else{
         echo "SteamCMD is set up and does not need to be downloaded!"
     }
