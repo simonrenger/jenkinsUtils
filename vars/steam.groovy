@@ -44,7 +44,7 @@ def deployIf(credentials,appManifest){
         echo "Request User Input"
         def INPUT = input message: 'Steam Guard Code:', ok: 'Submit',
                             parameters: [
-                            string(name: 'STEAM_GUARD', defaultValue: 'Mr Jenkins', description: 'Please provide your steam Guard code')]
+                            string(name: 'STEAM_GUARD', defaultValue: 'CODE HERE', description: 'Please provide your steam Guard code. Check your email')]
         deploy(credentials,appManifest,INPUT)
     }
 }
