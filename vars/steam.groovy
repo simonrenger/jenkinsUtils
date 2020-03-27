@@ -24,20 +24,38 @@ def appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdi
     return "app_build_${appId}.vdf"
 }
 
-def login(){
-    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
-                        parameters: [
-                        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')]
-                        return INPUT_PARAMS
+//downloads steamcmd
+def setup(sourceDir = "..\\",installDir = "..\\steamcmd"){
+    
+    sourceDir = "${env.workspace}\\${sourceDir}"
+    installDir ="${env.workspace}\\${installDir}"
+    if(!fileExists("${sourceDir}steamcmd.zip")){
+        powershell label: 'Download SteamCMD', script: "Invoke-WebRequest http://media.steampowered.com/installer/steamcmd.zip -O ${sourceDir}steamcmd.zip"
+        powershell label: 'Unzip SteamCMD', script: "Expand-Archive -LiteralPath ${sourceDir}steamcmd.zip -DestinationPath ${installDir}"
+    }else{
+        echo "SteamCMD is set up and does not need to be downloaded!"
+    }
+}
+
+def deployIf(credentials,appManifest){
+    try{
+        deploy(credentials,appManifest)
+    }catch(err){
+        echo "Request User Input"
+        def INPUT = input message: 'Steam Guard Code:', ok: 'Submit',
+                            parameters: [
+                            string(name: 'STEAM_GUARD', defaultValue: 'Mr Jenkins', description: 'Please provide your steam Guard code')]
+        deploy(credentials,appManifest,INPUT)
+    }
 }
 
 
 def deploy(credentials,appManifest,steamGuard = null){
     withCredentials([usernamePassword(credentialsId: credentials, passwordVariable: 'STEAMCMD_PASSWORD', usernameVariable: 'STEAMCMD_USERNAME')]) {
         if(steamGuard == null){
-            bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${appManifest}\" +quit"
+            bat label: 'steam deployment without SteamGuard', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" +run_app_build_http \"${appManifest}\" +quit"
         }else{
-             bat label: '', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" \"${steamGuard}\"  +run_app_build_http \"${appManifest}\" +quit"
+             bat label: 'steam deployment with SteamGuard', script: "\"${STEAM_BUILDER}\" +login \"${STEAMCMD_USERNAME}\" \"${STEAMCMD_PASSWORD}\" \"${steamGuard}\"  +run_app_build_http \"${appManifest}\" +quit"
         }
     }
 }
