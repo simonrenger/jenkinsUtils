@@ -96,6 +96,25 @@ def reviewObject(){
     return [change:null,review:null,pass:null,status:null,fail:null]
 }
 
+def getReviewId(){
+    def reviewId = "0";
+    try{
+    if(env.P4_REVIEW != null){
+    reviewId = "${env.P4_REVIEW}"
+    }else{
+     reviewId = "${review}"
+    }
+    return reviewId;
+    }catch(err){
+        return reviewId;
+    }
+}
+
+def getCurrentChangelistDescription(credential,client,view_mapping){
+    def reviewId = getReviewId()
+    return getChangelistDescription(ireviewId,credential,client,view_mapping)
+}
+
 
 
 def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
