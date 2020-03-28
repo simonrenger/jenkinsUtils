@@ -112,7 +112,7 @@ def getReviewId(){
 
 def getCurrentChangelistDescription(credential,client,view_mapping){
     def reviewId = getReviewId()
-    return getChangelistDescription(ireviewId,credential,client,view_mapping)
+    return getChangelistDescription(reviewId,credential,client,view_mapping)
 }
 
 
