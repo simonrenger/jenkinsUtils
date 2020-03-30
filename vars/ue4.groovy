@@ -17,6 +17,24 @@ def build(ue4_dir,project,project_name,platform,config,output_dir){
     bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 }
 
-def listTests(platform,project){
-    bat label: 'list all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation List;quit\""
+def listTests(project,platform,config = "Development"){
+echo "Ensuring ShaderCompileWorker is built before building project Editor modules..."
+bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ShaderCompileWorker ${platform} ${config}"
+echo "Ensure the Editor version of the game has been build..."
+bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
+echo "Retrieving automation test list..."
+def output = output bat label: 'list all tests', returnStdout: true, script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation List;quit\""
+process(output)
+}
+
+def process(input){
+    echo "Tests:"
+    def array = input.split("\n")
+    array.each {
+        value ->
+        def logData = value.split("Display:")
+       if(logData.length == 2){
+           echo logData[1]
+       }
+    }
 }
