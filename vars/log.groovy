@@ -1,6 +1,7 @@
-def setup(rulefile = 'msbuildparserules.txt'){
-    if (!fileExists(rulefile)) {
-writeFile file: rulefile, text: '''
+def setup(rulefile = 'msbuildparserules.txt', template = null){
+
+if(template == null){
+template = '''
 # Divide into sections based on project compile start
 start /BUILD COMMAND/
 start /COOK COMMAND/
@@ -12,7 +13,11 @@ warning /(?i)warning [A-Z]+[0-9]+:/
 warning /(?i)Warning:/
 warning /Couldn't find/
 '''
-    }
+}
+
+if (!fileExists(rulefile)) {
+    writeFile file: rulefile, text: template
+}
 }
 
 def warning(message){
