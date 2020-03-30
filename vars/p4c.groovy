@@ -177,9 +177,9 @@ def getCurrentReviewDescription(credential,client,view_mapping){
     //check if the message is restricted
     if(desc.contains("<description: restricted, no permission to view>")){
         if(!isCommitted()){
-            desc = "Desc has been submitted in the meanwhile. Without build validation. This might be a cause of a build error. Please do not commit before the build pipeline gives green light."
+            desc = "**Review has been submitted in the meanwhile. Without build validation. This might be a cause of a build error. Please do not commit before the build pipeline gives green light.**"
         }else{
-            desc = "Desc has been submitted, without build/test validation."
+            desc = "**Review has been submitted, without build/test validation.**"
         }
     }
     return desc
