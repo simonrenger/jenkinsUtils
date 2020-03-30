@@ -11,6 +11,11 @@ def setToken(token){
     token_ = token
 }
 
+def setup(url,token){
+    url_ = url
+    token_ = token
+}
+
 def update(id,status,resolution,handler = null){
 
 def body = [
