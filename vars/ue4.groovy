@@ -38,7 +38,7 @@ bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\Batch
 echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run all tests..."
-bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
+bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
 }
 
 def runTests(project,tests,platform = "Win64",config = "Development"){
@@ -55,7 +55,8 @@ bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\Batch
 echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run tests..."
-bat label: 'run tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nosplash -nullrhi -ExecCmds=\"automation RunTests Now ${testStr};quit\""
+
+bat label: 'run tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nosplash -nullrhi -ExecCmds=\"automation RunTests Now ${testStr};quit\""
 }
 
 /*
@@ -93,7 +94,7 @@ bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\Batch
 echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run test with filter ${filter}.." 
-bat label: 'run filtered tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunFilter ${filter};quit\""
+bat label: 'run filtered tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunFilter ${filter};quit\""
 
 }
 
