@@ -110,12 +110,30 @@ def getReviewId(){
     }
 }
 
-def getCurrentChangelistDescription(credential,client,view_mapping){
+def getChangelist(){
+    def changelistId = "0";
+    try{
+    if(env.P4_CHANGE != null){
+    changelistId = "${env.P4_CHANGE}"
+    }else{
+     changelistId = "${change}"
+    }
+    return changelistId;
+    }catch(err){
+        return changelistId;
+    }
+}
+
+def getCurrentReviewDescription(credential,client,view_mapping){
     def reviewId = getReviewId()
     return getChangelistDescription(reviewId,credential,client,view_mapping)
 }
 
 
+def getCurrentChangelistDescription(credential,client,view_mapping){
+    def reviewId = getChangelist()
+    return getChangelistDescription(reviewId,credential,client,view_mapping)
+}
 
 def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
     p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
