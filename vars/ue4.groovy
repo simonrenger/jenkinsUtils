@@ -55,7 +55,7 @@ bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\Batch
 echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run tests..."
-bat label: 'run tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunTests Now ${testStr};quit\""
+bat label: 'run tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nosplash -nullrhi -ExecCmds=\"automation RunTests Now ${testStr};quit\""
 }
 
 /*
