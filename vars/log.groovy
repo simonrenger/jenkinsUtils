@@ -15,7 +15,7 @@ warning /Couldn't find/
 '''
 }
 
-if (!fileExists(rulefile)) {
+if (!fileExists(rulefile) || template != null) {
     writeFile file: rulefile, text: template
 }
 }
