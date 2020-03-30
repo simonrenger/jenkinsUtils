@@ -41,8 +41,6 @@ echo "Run all tests..."
 bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
 }
 
-//[UE4CLI] EXECUTE COMMAND: "C:\ue4\UE_4.23.1_Management\Engine\Binaries\Win64\UE4Editor-Cmd.exe" "C:\jenkins\build latest\Kari.uproject" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nosplash -nullrhi -ExecCmds="automation RunTests Now TEST_CheckBlessing;quit"
-
 def runTests(project,tests,platform = "Win64",config = "Development"){
 def testStr = ""
 def testsSplit = tests.split(",")
