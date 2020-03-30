@@ -96,39 +96,94 @@ def reviewObject(){
     return [change:null,review:null,pass:null,status:null,fail:null]
 }
 
-def getReviewId(){
-    def reviewId = "0";
+def getReviewStatus(){
     try{
-    if(env.P4_REVIEW != null){
-    reviewId = "${env.P4_REVIEW}"
-    }else{
-     reviewId = "${review}"
-    }
-    return reviewId;
+        return "${status}"
     }catch(err){
-        return reviewId;
+        def reviewobj = reviewObject()
+        return reviewobj.status;
     }
 }
 
+def getReviewPass(){
+    try{
+        return "${pass}"
+    }catch(err){
+        def reviewobj = reviewObject()
+        return reviewobj.pass;
+    }
+}
+
+def getReviewFail(){
+    try{
+        return "${fail}"
+    }catch(err){
+        def reviewobj = reviewObject()
+        return reviewobj.fail;
+    }
+}
+
+
 def getChangelist(){
-    def changelistId = "0";
+    def reviewobj = reviewObject()
+    def changelistId =  reviewobj.change;
     try{
     if(env.P4_CHANGE != null){
     changelistId = "${env.P4_CHANGE}"
     }else{
      changelistId = "${change}"
     }
-    return changelistId;
+    return changelistId
     }catch(err){
-        return changelistId;
+        return changelistId
     }
 }
 
-def getCurrentReviewDescription(credential,client,view_mapping){
-    def reviewId = getReviewId()
-    return getChangelistDescription(reviewId,credential,client,view_mapping)
+
+def getReviewId(){
+    def reviewobj = reviewObject()
+    def reviewId = reviewobj.review
+    try{
+    if(env.P4_REVIEW != null){
+    reviewId = "${env.P4_REVIEW}"
+    }else{
+     reviewId = "${review}"
+    }
+    return reviewId
+    }catch(err){
+        return reviewId
+    }
 }
 
+
+def isReviewUpdate(){
+    def url = getReviewPass()
+    if(url != null){
+        return !url.contains(".v1")
+    }
+    return false
+}
+
+def isCommitted(){
+    if(getReviewStatus() == "commited") return true
+    return false
+}
+
+
+def getCurrentReviewDescription(credential,client,view_mapping){
+    def reviewId = getReviewId()
+    echo reviewId
+    def desc = getChangelistDescription(reviewId,credential,client,view_mapping)
+    //check if the message is restricted
+    if(desc.contains("<description: restricted, no permission to view>")){
+        if(!isCommitted()){
+            desc = "Desc has been submitted in the meanwhile. Without build validation. This might be a cause of a build error. Please do not commit before the build pipeline gives green light."
+        }else{
+            desc = "Desc has been submitted, without build/test validation."
+        }
+    }
+    return desc
+}
 
 def getCurrentChangelistDescription(credential,client,view_mapping){
     def reviewId = getChangelist()
