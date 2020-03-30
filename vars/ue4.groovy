@@ -41,6 +41,24 @@ echo "Run all tests..."
 bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
 }
 
+//[UE4CLI] EXECUTE COMMAND: "C:\ue4\UE_4.23.1_Management\Engine\Binaries\Win64\UE4Editor-Cmd.exe" "C:\jenkins\build latest\Kari.uproject" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nosplash -nullrhi -ExecCmds="automation RunTests Now TEST_CheckBlessing;quit"
+
+def runTests(project,tests,platform = "Win64",config = "Development"){
+def testStr = ""
+def testsSplit = tests.split(",")
+if(testsSplit.length == 0){
+    testStr = tests
+}else{
+    testStr = testsSplit.join("+")
+}
+echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\n"
+echo "Ensuring ShaderCompileWorker is built before building project Editor modules..."
+bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ShaderCompileWorker ${platform} ${config}"
+echo "Ensure the Editor version of the game has been build..."
+bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
+echo "Run tests..."
+bat label: 'run tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunTests Now ${testStr};quit\""
+}
 
 /*
 Filters:
@@ -66,7 +84,7 @@ switch(filter){
         echo "Valid Filter!";
     break;
     default:
-    error "The filter is not Valid! Valid: Engine Smoke Stress Perf Product"
+    error "runFilteredTests() The filter is not Valid! Valid: Engine Smoke Stress Perf Product"
     break;
 }
 
@@ -78,6 +96,7 @@ echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run test with filter ${filter}.." 
 bat label: 'run filtered tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -game -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunFilter ${filter};quit\""
+
 }
 
 def process(input){
