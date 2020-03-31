@@ -28,10 +28,3 @@ def unpack(filename,destination,format="zip",force = true){
         break;
     }
 }
-
-def retrieveAndUnpackArchive(url,filename,destination,format = "zip",credentials = null){
-    download url, filename, credentials
-    unpack(filename,destination,format,credentials)
-    powershell label: "Clean up", script: "rm ${filename}"
-    writeFile file: "${filename}.txt", text: "downloaded: ${filename}"
-}
