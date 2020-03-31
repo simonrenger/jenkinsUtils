@@ -10,11 +10,14 @@ A collection of useful `groovy` functions for our Unreal Engine 4 Project with P
 - deploy to steam
 - parse logs with the [Log Parser Plugin](https://plugins.jenkins.io/log-parser/)
 
+
 ## White list requirements
 
 Please white list the following in your jenkins: *https://jenkins-domain/scriptApproval/*
 
 `method org.jenkinsci.plugins.p4.groovy.P4Groovy run java.lang.String java.lang.String[]`
+
+**OS:** Windows only.
 
 ## collections of global functions:
 
@@ -458,6 +461,17 @@ script{
     ue4.runFilteredTests(PROJECT,"smoke",PLATFORM)
 }
 ```
+
+## unity functions
+
+`unity.setRoot(unityPath)`
+
+sets path for unity executable
+
+`unity.build(projectPath,executeMethod,level,output[, logFile = "log{$env.JOB_BASE_NAME}${env.BUILD_NUMBER}.txt"])`
+
+Builds a version of the Unity project using the projects C# build script.
+
 
 ## zip functions
 
