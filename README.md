@@ -63,6 +63,13 @@ notifes a discord webhook about that a build faild
 
 Will download a file via either cmd & curl or powershell. If credentials are given it uses cmd and basic auth. In this case it uses `withCredentials([usernamePassword(...` to get the credentials.
 
+
+`zip.retrieveAndUnpackArchive(url,filename,destination[,format = "zip",credentials = null])`
+
+Will download a archive and unpack it at its destiination. It will remove the archive at the end and leaves a `archivename.format.txt` in the destination
+*Note:* See `download`, `zip.unpack([...])`
+
+
 ## discord functions
 
 The discord global variables are just utilites they allow to create a proper discord message as well as send utilities
@@ -446,7 +453,4 @@ This will unpack a zip file in the given destination.
 *Default:* format has as default .zip or .7z. Later will be determined on the archive name.
 *Important*: All other formants need to be specified with `format`
 *Note*: `force` only works for `zip` and will overwrite the current unpacked files.
-
-`zip.retrieveAndUnpackArchive(url,filename,destination,format = "zip",credentials = null)`
-Will download a archive and unpack it at its destiination. It will remove the archive at the end and leaves a `archivename.txt` in the destination
 
