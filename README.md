@@ -59,6 +59,10 @@ notifes a discord webhook about that a build faild
     }
 ```
 
+`download url,filename[,credentials = null]`
+
+Will download a file via either cmd & curl or powershell. If credentials are given it uses cmd and basic auth. In this case it uses `withCredentials([usernamePassword(...` to get the credentials.
+
 ## discord functions
 
 The discord global variables are just utilites they allow to create a proper discord message as well as send utilities
@@ -163,47 +167,47 @@ pipeline {
 
 ### perforce
 
-`pull(credential,workspace_template,format = "jenkins-${JOB_NAME}")`
+`p4c.pull(credential,workspace_template,format = "jenkins-${JOB_NAME}")`
 
 calls `p4sync` under the hood with a writable workspace and parallel runners. This will pull down the repositry. If this is a build with review action it will also pull down the correct review and populate P4_REVIEW / P4_CHANGE
 
-`getCurrentChangelistDescription(credential,client,view_mapping) / getCurrentReviewDescription(credential,client,view_mapping)`
+`p4c.getCurrentChangelistDescription(credential,client,view_mapping) / getCurrentReviewDescription(credential,client,view_mapping)`
 
 Will request via `p4 describe` via `p4groovy` `p4.run("describe","-s","-S","12344")` this returns the desciption of the *current changelist*. The function will call `getReviewId()` internally to get the current review / changelist number.
 *Troubleshoot:* Mostlikely if `<description: restricted, no permission to view>` is the result the review (if called on are review) has been commited.
 **Important**: the underlaying call will make the client/workspace WIRTABLE.
 
-`getChangelistDescription(id,credential,client,view_mapping)`
+`p4c.getChangelistDescription(id,credential,client,view_mapping)`
 
 Will request via `p4 describe` via `p4groovy` `p4.run("describe","-s","-S","12344")` this returns the desciption. Mostlikely if `<description: restricted, no permission to view>` is the result the review (if called on are review) has been commited.
 **Important**: the underlaying call will make the client/workspace WIRTABLE.
 
-`getReviewId()`
+`p4c.getReviewId()`
 
 returns the current review Id
 
-`getChangelist()`
+`p4c.getChangelist()`
 
 returns the current changelist based on evaluate if `P4_CHANGE` exists or the variable `change` or `json`
 
-`getReviewStatus()`
+`p4c.getReviewStatus()`
 
 returns the current review status based on evaluate if the variable `status` or `json` exists
 
-`getReviewPass()`
+`p4c.getReviewPass()`
 
 returns the current review pass url based on evaluate if the variable `pass` or `json` exists
 
-`getReviewFail()`
+`p4c.getReviewFail()`
 
 returns the current review fail url based on evaluate if the variable `fail` or `json` exists
 
-`isReviewUpdate()` - *workaround*
+`p4c.isReviewUpdate()` - *workaround*
 
 returns true if the current review is an update or a new commit (false). 
 **Important**: only works if the `pass` / `fail` parameter is given!
 
-`isCommitted()`
+`p4c.isCommitted()`
 
 helper that returns true/false if a changelist has been already commited!
 
@@ -211,7 +215,7 @@ helper that returns true/false if a changelist has been already commited!
 
 returns a json object of the current review build request.
 
-`swarmUrl(credential,client,mapping)`
+`p4c.swarmUrl(credential,client,mapping)`
 
 returns the swarm review of the current client. All parameters are required! (Calls p4)
 
@@ -230,56 +234,56 @@ stage('p4 sync'){
 
 The `swarm_url` param means the actual swarm url not the review url.
 
-`comment(review,user,ticket,swarm_url,comment)`
+`p4c.comment(review,user,ticket,swarm_url,comment)`
 
 leaves a comment at the given swarm review.
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`upVote(review,user,ticket,swarm_url)`
+`p4c.upVote(review,user,ticket,swarm_url)`
 
 adds a up vote to a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`downVote(review,user,ticket,swarm_url)`
+`p4c.downVote(review,user,ticket,swarm_url)`
 
 adds a down vote to a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`approve(review,user,ticket,swarm_url)`
+`p4c.approve(review,user,ticket,swarm_url)`
 
 approves a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`needsReview(review,user,ticket,swarm_url)`
+`p4c.needsReview(review,user,ticket,swarm_url)`
 
 adds the needs review status to a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`needsRevision(review,user,ticket,swarm_url)`
+`p4c.needsRevision(review,user,ticket,swarm_url)`
 
 adds the needs revision status to a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`archive(review,user,ticket,swarm_url)`
+`p4c.archive(review,user,ticket,swarm_url)`
 
 archives a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`reject(review,user,ticket,swarm_url)`
+`p4c.reject(review,user,ticket,swarm_url)`
 
 rejects a review
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`updateState(review,user,ticket,swarm_url,state)`
+`p4c.updateState(review,user,ticket,swarm_url,state)`
 
 Updates the status of a review.
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
-`ticket(credentials,p4Port)`
+`p4c.ticket(credentials,p4Port)`
 
 Requests a ticket for a user (credentials Jenkins)
 
-`withTicket(credentials,p4Port,Closure body)`
+`p4c.withTicket(credentials,p4Port,Closure body)`
 
 Is a stage in which the ticket will be handes as argument to the closur
 
@@ -292,7 +296,7 @@ p4c.withTicket(env.P4USER,'ssl:swarm.url.tld:1234',{
 })
 ```
 
-`withSwarmUrl(credentials,client,mapping,Closure body)`
+`p4c.withSwarmUrl(credentials,client,mapping,Closure body)`
 
 In this stage we provide the swarm url to the body as well as the user
 
@@ -316,18 +320,18 @@ In this stage we provide the swarm url to the body as well as the user
 
 ## steam functions
 
-`setup(sourceDir = "..\\",installDir = "..\\steamcmd")`
+`steam.setup(sourceDir = "..\\",installDir = "..\\steamcmd")`
 
 Will download the `steamcmd.exe` and unzips it in the given folder so the rest of the steam global vars can work.
 **Important**: This step is required to run `deploy()` and `deployIf()`!
 **Note:** Uses powershell instead of bat.
 
 
-`depotManifest(depotNumber,contentRoot,localPath="*",depotPath=".",recursive="1",exclude="*.pdb")`
+`steam.depotManifest(depotNumber,contentRoot,localPath="*",depotPath=".",recursive="1",exclude="*.pdb")`
 
 creates the depot manifest file `depot_build_[depotNumber].vdf` in the current dir! It returns the name of the file.
 
-`appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdir="output")`
+`steam.appManifest(appId,depotNumber,contentroot,steamBranch,isPreview="0",outputdir="output")`
 
 creates the depot manifest file `app_build_[appId].vdf` in the current dir! It returns the name of the file.
 
@@ -361,45 +365,45 @@ With different dir:
 ```
 
 
-`deploy(credentials,appManifest,steamGuard = null)`
+`steam.deploy(credentials,appManifest,steamGuard = null)`
 
 Will call the `steamcmd` to deploy the game. `depotManifest` and `appManifest` should be executed before hand or on SCM. `steamGuard` can be handed to the function if needed. This function will **FAIL** if your mashine is not auth with steam. For convinance use `deployIf`
 
-`deployIf(credentials,appManifest)`
+`steam.deployIf(credentials,appManifest)`
 
 The same as `deploy` just that in case that `deploy()` fails because of the missing steamguard it will ask your via Jenkins for User Input.
 
 ### ue4 functions
 
-`setRoot(root)`
+`ue4.setRoot(root)`
 
 sets the engine root directory. 
 **Important** There is no check if the engine directory is correct or valid. Might get added.
 
-`root()`
+`ue4.root()`
 
 returns the engine root directory
 
-`build(ue4_dir,project,project_name,platform,config,output_dir)`
+`ue4.build(ue4_dir,project,project_name,platform,config,output_dir)`
 
 Will build the engine. The project parameter needs to contain `.uproject`. Might change. The project name is *just* the project name.
 
-`pack(ue4_dir,project,platform,config,output_dir)`
+`ue4.pack(ue4_dir,project,platform,config,output_dir)`
 
 Will cook and package the engine. The project parameter needs to contain `.uproject`. Might change.
 
 
-`listTests(project,platform[,config = "Development"])`
+`ue4.listTests(project,platform[,config = "Development"])`
 
 Will return a list of all tests. Might be buggy and slow.
 **Important**: `setRoot` needs to be called before you can use this function!
 
-`runAllTests(project[,platform = "Win64",config = "Development"])`
+`ue4.runAllTests(project[,platform = "Win64",config = "Development"])`
 
 Will run all tests of the given project. The project parameter needs to contain the `.uproject`.
 **Important**: `setRoot` needs to be called before you can use this function!
 
-`runTests(project,tests[,platform = "Win64",config = "Development"])`
+`ue4.runTests(project,tests[,platform = "Win64",config = "Development"])`
 
 Runs one or multiple tests. The tests need to be seperated by a `,`! The project  parameter needs to contain the `.uproject`.
 **Important**: `setRoot` needs to be called before you can use this function!
@@ -411,7 +415,7 @@ or multiple tests
 
 `ue4.runTests(PROJECT,"TEST_CheckDamage,TEST_CheckBlessing")`
 
-`runFilteredTests(project,filter[,platform = "Win64",config = "Development"])`
+`ue4.runFilteredTests(project,filter[,platform = "Win64",config = "Development"])`
 Runs filtered tests: 
 - Engine
 - Smoke
@@ -428,7 +432,21 @@ script{
 }
 ```
 
+## zip functions
 
+Needs `7z` for all other formats then `.zip`. [Installer](https://www.7-zip.org/) and it needs to be added to the `PATH` enviorment variables on windows. Bot the pack and unpack function are using `powershell` and `cmd/bat` commands
 
+`zip.packFolder(folder,archivename[,format="zip"])`
 
+Packs a folder and stores it under the archivename in the current folder. If any other format then zip is being used it uses `7z`.
+
+`zip.unpack(filename,destination[,format="zip",force = true])`
+
+This will unpack a zip file in the given destination.
+*Default:* format has as default .zip or .7z. Later will be determined on the archive name.
+*Important*: All other formants need to be specified with `format`
+*Note*: `force` only works for `zip` and will overwrite the current unpacked files.
+
+`zip.retrieveAndUnpackArchive(url,filename,destination,format = "zip",credentials = null)`
+Will download a archive and unpack it at its destiination. It will remove the archive at the end and leaves a `archivename.txt` in the destination
 
