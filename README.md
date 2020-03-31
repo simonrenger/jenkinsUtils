@@ -165,8 +165,9 @@ pipeline {
    }
 }
 ```
+*Comment:*
 
-> *Comment:* Functions to parse context for #[bugID] [status] [resolutions] is planned. This can be used to parse a git or p4 commit message to close a bug after the build / test has been successful. Or leave a comment on mantis if the test failed.
+>Functions to parse context for #[bugID] [status] [resolutions] is planned. This can be used to parse a git or p4 commit message to close a bug after the build / test has been successful. Or leave a comment on mantis if the test failed.
 
 ## perforce (p4c) functions
 
@@ -181,12 +182,15 @@ calls `p4sync` under the hood with a writable workspace and parallel runners. Th
 `p4c.getCurrentChangelistDescription(credential,client,view_mapping) / getCurrentReviewDescription(credential,client,view_mapping)`
 
 Will request via `p4 describe` via `p4groovy` `p4.run("describe","-s","-S","12344")` this returns the desciption of the *current changelist*. The function will call `getReviewId()` internally to get the current review / changelist number.
+
 *Troubleshoot:* Mostlikely if `<description: restricted, no permission to view>` is the result the review (if called on are review) has been commited.
+
 **Important**: the underlaying call will make the client/workspace WIRTABLE.
 
 `p4c.getChangelistDescription(id,credential,client,view_mapping)`
 
 Will request via `p4 describe` via `p4groovy` `p4.run("describe","-s","-S","12344")` this returns the desciption. Mostlikely if `<description: restricted, no permission to view>` is the result the review (if called on are review) has been commited.
+
 **Important**: the underlaying call will make the client/workspace WIRTABLE.
 
 `p4c.getReviewId()`
@@ -212,6 +216,7 @@ returns the current review fail url based on evaluate if the variable `fail` or 
 `p4c.isReviewUpdate()` - *workaround*
 
 returns true if the current review is an update or a new commit (false). 
+
 **Important**: only works if the `pass` / `fail` parameter is given!
 
 `p4c.isCommitted()`
@@ -244,46 +249,55 @@ The `swarm_url` param means the actual swarm url not the review url.
 `p4c.comment(review,user,ticket,swarm_url,comment)`
 
 leaves a comment at the given swarm review.
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.upVote(review,user,ticket,swarm_url)`
 
 adds a up vote to a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.downVote(review,user,ticket,swarm_url)`
 
 adds a down vote to a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.approve(review,user,ticket,swarm_url)`
 
 approves a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.needsReview(review,user,ticket,swarm_url)`
 
 adds the needs review status to a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.needsRevision(review,user,ticket,swarm_url)`
 
 adds the needs revision status to a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.archive(review,user,ticket,swarm_url)`
 
 archives a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.reject(review,user,ticket,swarm_url)`
 
 rejects a review
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.updateState(review,user,ticket,swarm_url,state)`
 
 Updates the status of a review.
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.ticket(credentials,p4Port)`
@@ -330,7 +344,9 @@ In this stage we provide the swarm url to the body as well as the user
 `steam.setup(sourceDir = "..\\",installDir = "..\\steamcmd")`
 
 Will download the `steamcmd.exe` and unzips it in the given folder so the rest of the steam global vars can work.
+
 **Important**: This step is required to run `deploy()` and `deployIf()`!
+
 **Note:** Uses powershell instead of bat.
 
 
@@ -385,6 +401,7 @@ The same as `deploy` just that in case that `deploy()` fails because of the miss
 `ue4.setRoot(root)`
 
 sets the engine root directory. 
+
 **Important** There is no check if the engine directory is correct or valid. Might get added.
 
 `ue4.root()`
@@ -403,16 +420,19 @@ Will cook and package the engine. The project parameter needs to contain `.uproj
 `ue4.listTests(project,platform[,config = "Development"])`
 
 Will return a list of all tests. Might be buggy and slow.
+
 **Important**: `setRoot` needs to be called before you can use this function!
 
 `ue4.runAllTests(project[,platform = "Win64",config = "Development"])`
 
 Will run all tests of the given project. The project parameter needs to contain the `.uproject`.
+
 **Important**: `setRoot` needs to be called before you can use this function!
 
 `ue4.runTests(project,tests[,platform = "Win64",config = "Development"])`
 
 Runs one or multiple tests. The tests need to be seperated by a `,`! The project  parameter needs to contain the `.uproject`.
+
 **Important**: `setRoot` needs to be called before you can use this function!
 
 *Example:*
@@ -441,7 +461,7 @@ script{
 
 ## zip functions
 
-Needs `7z` for all other formats then `.zip`. [Installer](https://www.7-zip.org/) and it needs to be added to the `PATH` enviorment variables on windows. Bot the pack and unpack function are using `powershell` and `cmd/bat` commands
+Needs `7z` for all other formats then `.zip`. [Installer](https://www.7-zip.org/) and it needs to be added to the `PATH` enviorment variables on windows. Both the pack and unpack function are using `powershell` and `cmd/bat` commands
 
 `zip.packFolder(folder,archivename[,format="zip"])`
 
@@ -450,7 +470,10 @@ Packs a folder and stores it under the archivename in the current folder. If any
 `zip.unpack(filename,destination[,format="zip",force = true])`
 
 This will unpack a zip file in the given destination.
+
 *Default:* format has as default .zip or .7z. Later will be determined on the archive name.
+
 *Important*: All other formants need to be specified with `format`
+
 *Note*: `force` only works for `zip` and will overwrite the current unpacked files.
 
