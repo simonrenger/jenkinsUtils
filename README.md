@@ -468,9 +468,9 @@ script{
 
 sets path for unity executable
 
-`unity.build(projectPath,executeMethod,level,output[, logFile = "log{$env.JOB_BASE_NAME}${env.BUILD_NUMBER}.txt"])`
+`unity.build(projectPath,executeMethod,executeMethodParams = [], logFile = "log{$env.JOB_BASE_NAME}${env.BUILD_NUMBER}.txt")`
 
-Builds a version of the Unity project using the projects C# build script.
+Builds a version of the Unity project using the projects C# build script. Will add `executeMethodParams` ad the end as parameter of the `executeMethod` if provieded.
 
 
 ## zip functions
