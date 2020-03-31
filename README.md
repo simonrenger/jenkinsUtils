@@ -10,6 +10,7 @@ A collection of useful `groovy` functions for our Unreal Engine 4 Project with P
 - deploy to steam
 - parse logs with the [Log Parser Plugin](https://plugins.jenkins.io/log-parser/)
 
+**See examples**: [Example folder](https://github.com/simonrenger/jenkinsUtils/tree/master/examples)
 
 ## White list requirements
 
