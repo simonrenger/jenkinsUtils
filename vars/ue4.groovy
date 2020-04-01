@@ -8,15 +8,15 @@ def root(){
     return engineRoot
 }
 
-def pack(ue4_dir,project,platform,config,output_dir){
+def pack(ue4_dir,project,platform,config,output_dir,logDir = "${env.WORKSPACE}\\ue4_pack_log_${env.BUILD_NUMBER}.log"){
     echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\nOutput directory: ${output_dir}"
-    bat label: 'Exec Package', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\RunUAT.bat\" BuildCookRun -project=\"${project}\" -noP4 -Distribution -TargetPlatform=${platform} -Platform=${platform} -ClientConfig=${config} -ServerConfig=${config} -Cook -allmaps -Build -Stage -Pak -Archive -archivedirectory=\"${output_dir}\" -Rocket -Prereqs -Package"
+    bat label: 'Exec Package', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\RunUAT.bat\" BuildCookRun -project=\"${project}\" -noP4 -Distribution -TargetPlatform=${platform} -Platform=${platform} -ClientConfig=${config} -ServerConfig=${config} -Cook -allmaps -Build -Stage -Pak -Archive -archivedirectory=\"${output_dir}\" -Rocket -Prereqs -Package -log=\"${logDir}\""
 }
 
-def build(ue4_dir,project,project_name,platform,config,output_dir){
+def build(ue4_dir,project,project_name,platform,config,output_dir,logDir = "${env.WORKSPACE}\\ue4_pack_log_${env.BUILD_NUMBER}.log"){
     echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\nOutput directory: ${output_dir}"
-    bat label: 'UnrealBuildTool', script: "CALL \"${ue4_dir}Engine\\Binaries\\DotNET\\UnrealBuildTool.exe\" -projectfiles -project=\"${project}\" -game -rocket -progress -2019 -Platforms=${platform} PrecompileForTargets = PrecompileTargetsType.Any;"
-    bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
+    bat label: 'UnrealBuildTool', script: "CALL \"${ue4_dir}Engine\\Binaries\\DotNET\\UnrealBuildTool.exe\" -projectfiles -project=\"${project}\" -game -rocket -progress -2019 -log=\"${logDir}\" -Platforms=${platform} PrecompileForTargets = PrecompileTargetsType.Any;"
+    bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\" -log=\"${logDir}\""
 }
 
 def listTests(project,platform,config = "Development"){
