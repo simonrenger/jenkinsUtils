@@ -73,9 +73,12 @@ Will download a file via either cmd & curl or powershell. If credentials are giv
 Will download a archive and unpack it at its destiination. It will remove the archive at the end and leaves a `archivename.format.txt` in the destination
 *Note:* See `download`, `zip.unpack([...])`
 
-`mkdir(dir,[throwError=true])`
+`mkdir(path,name,[throwError=true])`
 
 creates a new directory. By default if the directory exists it will throw an error otherweise it will continue.
+
+*example:*
+`mkdir "${env.WORKSPACE}\\Content\\", "Data"`
 
 
 ## discord functions
