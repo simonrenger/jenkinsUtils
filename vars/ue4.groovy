@@ -23,7 +23,13 @@ def build(ue4_dir,project,project_name,platform,config,output_dir,logDir = "${en
     }
 }
 
-def listTests(project,platform,config = "Development"){
+def createProjectVar(project_name,path){
+    return "${path}\\${project_name}.uproject"
+}
+
+def listTests(project_name,project_path,platform,config = "Development"){
+def project = createProjectVar(project_name,project_path)
+//create project
 echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\n"
 echo "Ensuring ShaderCompileWorker is built before building project Editor modules..."
 bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ShaderCompileWorker ${platform} ${config}"
@@ -35,7 +41,8 @@ return process(output)
 }
 
 
-def runAllTests(project,platform = "Win64",config = "Development"){
+def runAllTests(project_name,project_path,platform = "Win64",config = "Development"){
+def project = createProjectVar(project_name,project_path)
 echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\n"
 echo "Ensuring ShaderCompileWorker is built before building project Editor modules..."
 bat label: 'ShaderCompileWorker', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ShaderCompileWorker ${platform} ${config}"
@@ -45,7 +52,8 @@ echo "Run all tests..."
 bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
 }
 
-def runTests(project,tests,platform = "Win64",config = "Development"){
+def runTests(project_name,project_path,tests,platform = "Win64",config = "Development"){
+def project = createProjectVar(project_name,project_path)
 def testStr = ""
 def testsSplit = tests.split(",")
 if(testsSplit.length == 0){
@@ -71,7 +79,8 @@ Stress
 Perf
 Product
 */
-def runFilteredTests(project,filter,platform = "Win64",config = "Development"){
+def runFilteredTests(project_name,project_path,filter,platform = "Win64",config = "Development"){
+def project = createProjectVar(project_name,project_path)
 
 switch(filter){
     case "Engine":
