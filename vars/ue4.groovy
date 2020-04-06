@@ -16,7 +16,11 @@ def pack(ue4_dir,project,platform,config,output_dir,logDir = "${env.WORKSPACE}\\
 def build(ue4_dir,project,project_name,platform,config,output_dir,logDir = "${env.WORKSPACE}\\ue4_pack_log_${env.BUILD_NUMBER}.log"){
     echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\nOutput directory: ${output_dir}"
     bat label: 'UnrealBuildTool', script: "CALL \"${ue4_dir}Engine\\Binaries\\DotNET\\UnrealBuildTool.exe\" -projectfiles -project=\"${project}\" -game -rocket -progress -2019 -log=\"${logDir}\" -Platforms=${platform} PrecompileForTargets = PrecompileTargetsType.Any;"
-    bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\" -log=\"${logDir}\""
+    if(config == "Development"){
+        bat label: 'Build Engine', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\" -log=\"${logDir}\""
+    }else{
+        echo "Do not build Engine in ${config}. We build only in Development."
+    }
 }
 
 def listTests(project,platform,config = "Development"){
@@ -98,6 +102,12 @@ bat label: 'run filtered tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\
 
 }
 
+//https://docs.unrealengine.com/en-US/Engine/Basics/Redirectors/index.html
+def fixupRedirectors (){
+    echo "fixupRedirectors"
+}
+
+//FIXME: is not really working as expected
 def process(input){
     echo "Tests:"
     def logLine = input.split("\n")
