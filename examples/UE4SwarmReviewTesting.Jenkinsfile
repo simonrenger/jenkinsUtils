@@ -63,49 +63,49 @@ pipeline {
             steps{
                  script{
                   ue4.setRoot(UE4_DIR)
-                  ue4.runTests(PROJECT,"TEST_HEALTH")
+                  ue4.runTests(PROJECT_NAME,"${env.WORKSPACE}","TEST_HEALTH")
                  }
             }
                 }
         stage('multiple tests'){
                 steps{
                     script{
-                    ue4.runTests(PROJECT,"TEST_HEALTH,TEST_DAMAGE")
+                    ue4.runTests(PROJECT_NAME,"${env.WORKSPACE}","TEST_HEALTH,TEST_DAMAGE")
                     }
                 }
             }
         stage('smoke tests'){
                 steps{
                     script{
-                    ue4.runFilteredTests(PROJECT,"smoke",PLATFORM)
+                    ue4.runFilteredTests(PROJECT_NAME,"${env.WORKSPACE}","smoke",PLATFORM)
                     }
                 }
             }
         stage('engine tests'){
                 steps{
                     script{
-                    ue4.runFilteredTests(PROJECT,"engine",PLATFORM)
+                    ue4.runFilteredTests(PROJECT_NAME,"${env.WORKSPACE}","engine",PLATFORM)
                     }
                 }
             }
         stage('stress tests'){
                 steps{
                     script{
-                    ue4.runFilteredTests(PROJECT,"stress",PLATFORM)
+                    ue4.runFilteredTests(PROJECT_NAME,"${env.WORKSPACE}","stress",PLATFORM)
                     }
                 }
             }
         stage('pref tests'){
                 steps{
                     script{
-                    ue4.runFilteredTests(PROJECT,"pref",PLATFORM)
+                    ue4.runFilteredTests(PROJECT_NAME,"${env.WORKSPACE}","pref",PLATFORM)
                     }
                 }
             }
         stage('all tests'){
                 steps{
                     script{
-                    ue4.runAllTests(PROJECT,PLATFORM)
+                    ue4.runAllTests(PROJECT_NAME,"${env.WORKSPACE}",PLATFORM)
                     }
                 }        
             }
