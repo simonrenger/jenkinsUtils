@@ -193,3 +193,18 @@ def getCurrentChangelistDescription(credential,client,view_mapping){
 def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
     p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
 }
+
+
+def reportToSwarm(isPass = true){
+    def url = ""
+    if(isPass){
+        url = getReviewPass()
+    }else{
+        url = getReviewFail()
+    }
+    try{
+        bat label: 'inform swarm', script: "curl \"${url}\"" // makes sure that swarm shows the build is good
+    }catch(err){
+        echo "no pass parameter was given! url: ${url}"
+    }
+}
