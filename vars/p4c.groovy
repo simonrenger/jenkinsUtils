@@ -49,52 +49,74 @@ def withSwarm(credentials,p4Port,client,mapping,Closure body){
                         url,user->
                         swarm.setup(user,ticket,url)
                         body(user,ticket,url)
-                        swarm.clear();
+                        swarm.clear()
                     }
                 )
         }
     )
 }
+
+// do not mix and match with swarm functions
 def comment(review,user,ticket,swarm_url,comment){
     swarm.setup(user,ticket,swarm_url)
     swarm.comment(review,comment)
+    swarm.clear()
 }
 
+// do not mix and match with swarm functions
 def upVote(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.upVote(review)
+    swarm.clear()
 }
 
+// do not mix and match with swarm functions
 def downVote(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.downVote(review)
+    swarm.clear()
 }
 
+// do not mix and match with swarm functions
 def approve(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.approve(review)
+    swarm.clear()
 }
 
+// do not mix and match with swarm functions
 def needsReview(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.needsReview(review)
+    swarm.clear()
 }
+
+// do not mix and match with swarm functions
 def needsRevision(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.needsRevision(review)
+    swarm.clear()
 }
+
+// do not mix and match with swarm functions
 def archive(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.archive(review)
+    swarm.clear()
 }
+
+// do not mix and match with swarm functions
 def reject(review,user,ticket,swarm_url){
     swarm.setup(user,ticket,swarm_url)
     swarm.reject(review)
+    swarm.clear()
 }
 
+// do not mix and match with swarm functions
 def updateState(review,user,ticket,swarm_url,state){
     swarm.setup(user,ticket,swarm_url)
     swarm.updateState(review,state)
+    swarm.clear()
 }
 
 
