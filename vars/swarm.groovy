@@ -68,7 +68,7 @@ def withReview(reviewId,Closure body){
 }
 
 def getParticipants(jsonObjectofReview,index){
-    return jsonObjectofReview['reviews'][index]['participants']
+    return jsonObjectofReview.reviews[index].participants
 }
 
 def updateTestStatus(isPass = true){
