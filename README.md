@@ -97,6 +97,27 @@ sends a message to the provieded webhook. Message can be a string should be a Di
 
 sends a file to the provieded webhook
 
+`discord.mentionUser(message[,filterFile="discord_filter.json"])`
+
+Will replace any user set in the `discord_filter.json` file and mention them. It will replace all users with what has been spcifed in the file.
+
+`discord.mentionGroup(message[,filterFile="discord_filter.json"])`
+
+Will replace any group/role set in the `discord_filter.json` file and mention them.
+
+**Note:** File format:
+
+```json
+{
+    "discord_users":{
+        "Username":"ID"
+    },
+    "discord_groups":{
+        "roleName":"&ID"
+    }
+}
+```
+
 ## log functions
 
 Provides an interface to log warning, errors and infos

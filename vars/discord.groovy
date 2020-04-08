@@ -36,19 +36,19 @@ def sendFile(file,hook){
        bat label: 'sendFileViaDiscord', script: "curl -F \"file=@${file}\" ${hook}" 
 }
 
-def mention(message,filter,filterFile="discord_filter.json",tag=""){
+def mention(message,filter,filterFile="discord_filter.json"){
     def content = readFile encoding: 'UTF-8', file: filterFile
     echo content
     def jsonSlurper = new JsonSlurper()
     def filterObject = jsonSlurper.parseText(content)
     filterObject[filter].each{ key, value -> 
-    message = message.replace("${tag}${key}","<@${value}>")
+    message = message.replace("${key}","<@${value}>")
     }
     return  message
 }
 
 def mentionGroup(message,filterFile="discord_filter.json"){
-    return mention(message,"discord_groups",filterFile,"#")
+    return mention(message,"discord_groups",filterFile)
 }
 
 def mentionUser(message,filterFile="discord_filter.json"){
