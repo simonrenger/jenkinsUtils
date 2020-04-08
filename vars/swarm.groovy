@@ -1,16 +1,12 @@
 import groovy.json.JsonSlurper
 
-class swarmObject {
-    
-}
-
 def swarm_object = null
 
 def setup(user,ticket,url){
     swarm_object = [user:null,ticket:null,url:null]
     swarm_object.user = user
     swarm_object.ticket = ticket
-    swarm_object.swarmurl = url
+    swarm_object.url = url
 }
 
 def comment(review,comment){
@@ -71,8 +67,8 @@ def withReview(reviewId,Closure body){
     body(jsonObjectofReview)
 }
 
-def getParticipants(){
-    return null
+def getParticipants(jsonObjectofReview,index){
+    return jsonObjectofReview['reviews'][index]['participants']
 }
 
 def updateTestStatus(isPass = true){
