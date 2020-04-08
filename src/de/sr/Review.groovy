@@ -1,4 +1,4 @@
-package com.p4
+package de.sr
 
 class Review implements Serializable {
   def steps
