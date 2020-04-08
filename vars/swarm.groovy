@@ -66,12 +66,6 @@ def reviewInfo(review){
     }
 }
 
-def withReview(reviewId,Closure body){
-    def jsonObjectofReview = reviewInfo(reviewId);
-    body(jsonObjectofReview)
-}
-
-
 def getReviewParticipants(jsonObjectofReview,index = 0){
     return jsonObjectofReview.reviews[index].participants
 }

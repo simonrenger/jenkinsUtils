@@ -274,13 +274,13 @@ stage('p4 sync'){
 }
 ```
 
-### swarm
-
-The `swarm_url` param means the actual swarm url not the review url.
+*Note:* The `swarm_url` param means the actual swarm url not the review url.
 
 `p4c.comment(review,user,ticket,swarm_url,comment)`
 
 leaves a comment at the given swarm review.
+
+*Note:* please use the swarm header if possible.
 
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
@@ -288,11 +288,16 @@ leaves a comment at the given swarm review.
 
 adds a up vote to a review
 
+*Note:* please use the swarm header if possible.
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.downVote(review,user,ticket,swarm_url)`
 
 adds a down vote to a review
+
+*Note:* please use the swarm header if possible.
+
 
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
@@ -300,11 +305,17 @@ adds a down vote to a review
 
 approves a review
 
+*Note:* please use the swarm header if possible.
+
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.needsReview(review,user,ticket,swarm_url)`
 
 adds the needs review status to a review
+
+*Note:* please use the swarm header if possible.
+
 
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
@@ -312,11 +323,17 @@ adds the needs review status to a review
 
 adds the needs revision status to a review
 
+*Note:* please use the swarm header if possible.
+
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.archive(review,user,ticket,swarm_url)`
 
 archives a review
+
+*Note:* please use the swarm header if possible.
+
 
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
@@ -324,11 +341,17 @@ archives a review
 
 rejects a review
 
+*Note:* please use the swarm header if possible.
+
+
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
 `p4c.updateState(review,user,ticket,swarm_url,state)`
 
 Updates the status of a review.
+
+*Note:* please use the swarm header if possible.
+
 
 **Important**: user needs to be a valid user NOT a credential ID from  jenkins. The ticket needs to be valid and for the same user.
 
@@ -338,7 +361,7 @@ Requests a ticket for a user (credentials Jenkins)
 
 `p4c.withTicket(credentials,p4Port,Closure body)`
 
-Is a stage in which the ticket will be handes as argument to the closur
+Is a stage in which the ticket will be handes as argument to the closure
 
 *Example:* 
 
@@ -370,6 +393,105 @@ In this stage we provide the swarm url to the body as well as the user
         }
     )
 ```
+
+`p4c.withSwarm(credentials,p4Port,client,mapping,Closure body)`
+
+can be used to make easier use of the swarm header. This one sets the setup and clears at the end also the global swarm state. It returns to the `body(user,ticket,url)`
+
+*Example:*
+
+```groovy
+ p4c.withTicket(env.P4USER,env.P4HOST,env.P4CLIENT,env.P4MAPPING, {
+     user,
+     ticket,
+     swarmUrl ->
+     def reviewObject = swarm.reviewInfo(reviewId)
+     def particpants = swarm.getReviewParticipants(reviewObject)
+     //...
+ })
+```
+
+### swarm
+
+**When using any swarm function the setup function needs to be called first! unless you are using `p4c.withSwarm(...)`**
+
+`swarm.setup(user,ticket,url)`
+
+Sets up the global varibales this header uses. `swarm.clear()` should be called at the end of the usage!
+
+`swarm.clear()`
+
+clears out the gloabl variables
+
+`swarm.comment(review,comment)`
+
+leaves a comment at the given swarm review.
+
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.upVote(review)`
+
+adds a up vote to a review
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.downVote(review)`
+
+adds a down vote to a review
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.approve(review)`
+
+approves a review
+
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.needsReview(review)`
+
+adds the needs review status to a review
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.needsRevision(review)`
+
+adds the needs revision status to a review
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.archive(review)`
+
+archives a review
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.reject(review)`
+
+rejects a review
+
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.updateState(review,state)`
+
+Updates the status of a review.
+
+**Important**: You must call `swarm.setup(...)` first before you can use this function.
+
+`swarm.reviewInfo(review)`
+
+requests from the swarm API information about the review and returns a review Object. This can be used with the following utility functions:
+
+`getReviewParticipants(jsonObjectofReview[,index = 0])`
+
+`getReviewAuthor(jsonObjectofReview[,index = 0])`
+
+`getReviewDescription(jsonObjectofReview[,index = 0])`
+
+`getReviewState(jsonObjectofReview[,index = 0])`
+
 
 ## steam functions
 
