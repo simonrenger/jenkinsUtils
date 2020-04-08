@@ -1,11 +1,15 @@
 import groovy.json.JsonSlurper
 
-def swarm_object = [user:null,ticket:null,url=null]
+class swarmObject {
+    
+}
+
+def swarm_object = [user:null,ticket:null,url:null]
 
 def setup(user,ticket,url){
     swarm_object.user = user
     swarm_object.ticket = ticket
-    swarm_object.url = url
+    swarm_object.swarmurl = url
 }
 
 def comment(review,comment){
