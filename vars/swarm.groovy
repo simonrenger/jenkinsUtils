@@ -9,6 +9,10 @@ def setup(user,ticket,url){
     swarm_object.url = url
 }
 
+def clear(){
+    swarm_object = [user:null,ticket:null,url:null]
+}
+
 def comment(review,comment){
     bat label: 'send comment request', script: "curl -u \"${swarm_object.user}:${swarm_object.ticket}\" -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"topic=reviews/${review}&body=${comment}\" \"${swarm_object.url}/api/v9/comments\""
 }
@@ -67,8 +71,21 @@ def withReview(reviewId,Closure body){
     body(jsonObjectofReview)
 }
 
-def getParticipants(jsonObjectofReview,index){
+
+def getReviewParticipants(jsonObjectofReview,index = 0){
     return jsonObjectofReview.reviews[index].participants
+}
+
+def getReviewAuthor(jsonObjectofReview,index = 0){
+    return jsonObjectofReview.reviews[index].author
+}
+
+def getReviewDescription(jsonObjectofReview,index = 0){
+    return jsonObjectofReview.reviews[index].description
+}
+
+def getReviewState(jsonObjectofReview,index = 0){
+    return jsonObjectofReview.reviews[index].state
 }
 
 def updateTestStatus(isPass = true){

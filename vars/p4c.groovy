@@ -39,37 +39,62 @@ def withSwarmUrl(credentials,client,mapping,Closure body){
         }
 }
 
+// sets up swarm
+def withSwarm(credentials,p4Port,client,mapping,Closure body){
+    withTicket(credentials,p4Port,
+        {
+            ticket->
+                withSwarmUrl(env.P4USER,env.P4CLIENT,env.P4MAPPING,
+                    { 
+                        url,user->
+                        swarm.setup(user,ticket,url)
+                        body(user,ticket,url)
+                        swarm.clear();
+                    }
+                )
+        }
+    )
+}
 def comment(review,user,ticket,swarm_url,comment){
-    bat label: 'send comment request', script: "curl -u \"${user}:${ticket}\" -X POST -H \"Content-Type: application/x-www-form-urlencoded\" -d \"topic=reviews/${review}&body=${comment}\" \"${swarm_url}/api/v9/comments\""
+    swarm.setup(user,ticket,swarm_url)
+    swarm.comment(review,comment)
 }
 
 def upVote(review,user,ticket,swarm_url){
-    bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/up\" "
+    swarm.setup(user,ticket,swarm_url)
+    swarm.upVote(review)
 }
 
 def downVote(review,user,ticket,swarm_url){
-    bat label: '', script: "curl -u \"${user}:${ticket}\" -X POST \"${swarm_url}/reviews/${review}/vote/down\" "
+    swarm.setup(user,ticket,swarm_url)
+    swarm.downVote(review)
 }
 
 def approve(review,user,ticket,swarm_url){
-    updateState(review,user,ticket,swarm_url,"approved")
+    swarm.setup(user,ticket,swarm_url)
+    swarm.approve(review)
 }
 
 def needsReview(review,user,ticket,swarm_url){
-    updateState(review,user,ticket,swarm_url,"needsReview")
+    swarm.setup(user,ticket,swarm_url)
+    swarm.needsReview(review)
 }
 def needsRevision(review,user,ticket,swarm_url){
-    updateState(review,user,ticket,swarm_url,"needsRevision")
+    swarm.setup(user,ticket,swarm_url)
+    swarm.needsRevision(review)
 }
 def archive(review,user,ticket,swarm_url){
-    updateState(review,user,ticket,swarm_url,"archived")
+    swarm.setup(user,ticket,swarm_url)
+    swarm.archive(review)
 }
 def reject(review,user,ticket,swarm_url){
-    updateState(review,user,ticket,swarm_url,"rejected")
+    swarm.setup(user,ticket,swarm_url)
+    swarm.reject(review)
 }
 
 def updateState(review,user,ticket,swarm_url,state){
-    bat label: 'update state', script: "curl -u \"${user}:${ticket}\" -X PATCH  -H \"Content-Type: application/x-www-form-urlencoded\" -d \"state=${state}\" \"${swarm_url}/api/v9/reviews/${review}/state/\""
+    swarm.setup(user,ticket,swarm_url)
+    swarm.updateState(review,state)
 }
 
 
@@ -192,19 +217,4 @@ def getCurrentChangelistDescription(credential,client,view_mapping){
 
 def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
     p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
-}
-
-
-def reportToSwarm(isPass = true){
-    def url = ""
-    if(isPass){
-        url = getReviewPass()
-    }else{
-        url = getReviewFail()
-    }
-    try{
-        bat label: 'inform swarm', script: "curl \"${url}\"" // makes sure that swarm shows the build is good
-    }catch(err){
-        echo "no pass parameter was given! url: ${url}"
-    }
 }
