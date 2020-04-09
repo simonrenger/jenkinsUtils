@@ -64,7 +64,9 @@ def reviewParser(json){
                 participants: []
             ]
         review.participants.each{user,data->
-            tempReview.participants.add(user)
+            if(user != review.author){
+                tempReview.participants.add(user)
+            }
         }
         temp.reviews.add(tempReview)
     }

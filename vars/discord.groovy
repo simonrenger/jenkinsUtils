@@ -75,5 +75,5 @@ def swarmReviewToMessage(reviewObject,autoMention = true){
         desc = mentionUser(desc)
         participants = mentionUser(participants)
     }
-      return "Review ID: ${swarm.getReviewId(reviewObject)}\nAuthor: ${swarm.getReviewAuthor(reviewObject)}\nReviwer: ${participants}\nDescription:\n${desc}"
+      return "Review ID: ${swarm.getReviewId(reviewObject)}\n**Author**: ${swarm.getReviewAuthor(reviewObject)}\rRviewer: ${participants}\nDescription:\n${desc}"
 }
