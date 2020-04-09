@@ -41,17 +41,12 @@ def withSwarmUrl(credentials,client,mapping,Closure body){
 
 
 def withSwarm(credentials,p4Port,client,mapping,Closure body){
-    withTicket(credentials,p4Port,
-        {
-            ticket->
-                withSwarmUrl(env.P4USER,env.P4CLIENT,env.P4MAPPING,
-                    { 
-                        url,user->
-                        body(user,ticket,url)
-                    }
-                )
+        withSwarmUrl(env.P4USER,env.P4CLIENT,env.P4MAPPING)
+        { 
+            url,user->
+            def p4Ticket = ticket(credentials,p4Port)
+            body(user,p4Ticket,url)
         }
-    )
 }
 
 // do not mix and match with swarm functions
