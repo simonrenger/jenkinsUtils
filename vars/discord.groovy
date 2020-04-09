@@ -38,8 +38,11 @@ def sendFile(file,hook){
 }
 
 def mention(message,filter,filterFile="discord_filter.json"){
-    def content = readFile encoding: 'UTF-8', file: filterFile
-    echo content
+    if(!fileExists(filterFile)){
+        error("Could not find ${filterFile}")
+        return null;
+    }
+    def content = readFile file: filterFile
     def jsonSlurper = new JsonSlurper()
     def filterObject = jsonSlurper.parseText(content)
     filterObject[filter].each{ key, value -> 
@@ -57,8 +60,8 @@ def mentionUser(message,filterFile="discord_filter.json"){
 }
 
 //creates a message from a swarm review object and translates this into a format
-def swarmReviewToMessage(reviewObject,messageFile="message.txt"){
-    def message = "";
+def swarmReviewToMessage(reviewObject,autoMention = true){
+    def message = ""
     //set up reviwer string:
     def participantsList = swarm.getReviewParticipants(reviewObject)
     def participants = ""
@@ -66,10 +69,11 @@ def swarmReviewToMessage(reviewObject,messageFile="message.txt"){
         key,value ->
         participants = "${key} ${participants}"
     }
-    if(fileExists(messageFile)){
-        def content = readFile encoding: 'UTF-8', file: messageFile
-    }else{
-        message = "Review ID: ${swarm.getReviewId(reviewObject)}\nAuthor: ${swarm.getReviewAuthor(reviewObject)}\nReviwer: ${participants}\nDescription:\n ${swarm.getReviewDescription(reviewObject)}"
+    def desc = swarm.getReviewDescription(reviewObject)
+    if(autoMention == true){
+        desc = mentionGroup(desc)
+        desc = mentionUser(desc)
+        participants = mentionUser(participants)
     }
-    return message
+      return "Review ID: ${swarm.getReviewId(reviewObject)}\nAuthor: ${swarm.getReviewAuthor(reviewObject)}\nReviwer: ${participants}\nDescription:\n${desc}"
 }
