@@ -46,6 +46,34 @@ def updateState(review,state){
     bat label: 'update state', script: "curl -u \"${swarm_object.user}:${swarm_object.ticket}\" -X PATCH  -H \"Content-Type: application/x-www-form-urlencoded\" -d \"state=${state}\" \"${swarm_object.url}/api/v9/reviews/${review}/state/\""
 }
 
+// expensiv and workaround!
+@NonCPS
+def reviewParser(json){
+    try{
+    final slurper = new JsonSlurper()
+    def object = slurper.parseText(json)
+    def temp = [
+        reviews: []
+    ]
+    for(i = 0;i  < object.totalCount; i++ ){
+        def review = object.reviews[i]
+        def tempReview = [
+                id: review.id,
+                author: review.author,
+                description:review.description,
+                participants: []
+            ]
+        review.participants.each{user,data->
+            tempReview.participants.add(user)
+        }
+        temp.reviews.add(tempReview)
+    }
+    return temp
+    }catch(err){
+        error(err.getMessage())
+    }
+}
+
 def reviewInfo(review){
     def crulResponse = bat( encoding: 'UTF-8', label: 'request review Infos', script: "curl -u \"${swarm_object.user}:${swarm_object.ticket}\" \"${swarm_object.url}/api/v9/reviews?max=2&fields=id,participants,description,author,state,projects&ids\\[\\]=${review}\"" , returnStdout: true)
     def reviewArray = crulResponse.split('\\n')
@@ -57,13 +85,7 @@ def reviewInfo(review){
         echo "Result parsing is incorrect: original string ${crulResponse}"
         error()
     }
-    def jsonSlurper = new JsonSlurper()
-    try{
-    return jsonSlurper.parseText(reviewinfo)
-    }catch(err){
-        echo err.getMessage()
-        return []
-    }
+    return reviewParser(reviewinfo)
 }
 
 def getReviewId(jsonObjectofReview,index = 0){
