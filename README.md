@@ -396,12 +396,12 @@ In this stage we provide the swarm url to the body as well as the user
 
 `p4c.withSwarm(credentials,p4Port,client,mapping,Closure body)`
 
-can be used to make easier use of the swarm header. This one sets the setup and clears at the end also the global swarm state. It returns to the `body(user,ticket,url)`
+It returns to the `body(user,ticket,url)`. Internally it combines `withTicket(..)` and `withSwarmUrl(...)`
 
 *Example:*
 
 ```groovy
- p4c.withTicket(env.P4USER,env.P4HOST,env.P4CLIENT,env.P4MAPPING, {
+ p4c.withSwarm(env.P4USER,env.P4HOST,env.P4CLIENT,env.P4MAPPING, {
      user,
      ticket,
      swarmUrl ->

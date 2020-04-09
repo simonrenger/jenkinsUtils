@@ -39,7 +39,7 @@ def withSwarmUrl(credentials,client,mapping,Closure body){
         }
 }
 
-// sets up swarm
+
 def withSwarm(credentials,p4Port,client,mapping,Closure body){
     withTicket(credentials,p4Port,
         {
@@ -47,9 +47,7 @@ def withSwarm(credentials,p4Port,client,mapping,Closure body){
                 withSwarmUrl(env.P4USER,env.P4CLIENT,env.P4MAPPING,
                     { 
                         url,user->
-                        swarm.setup(user,ticket,url)
                         body(user,ticket,url)
-                        swarm.clear()
                     }
                 )
         }
