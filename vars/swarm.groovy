@@ -66,6 +66,10 @@ def reviewInfo(review){
     }
 }
 
+def getReviewId(jsonObjectofReview,index = 0){
+    return jsonObjectofReview.reviews[index].id
+}
+
 def getReviewParticipants(jsonObjectofReview,index = 0){
     return jsonObjectofReview.reviews[index].participants
 }
