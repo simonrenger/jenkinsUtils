@@ -36,7 +36,7 @@ def parse(projectRulePath = 'msbuildparserules.txt',parsingRulesPath = 'msbuildp
     logParser(projectRulePath:projectRulePath, parsingRulesPath: parsingRulesPath , showGraphs: showGraphs, useProjectRule: true)
 }
 
-def this(){
+def me(){
     env.GLOBAL_STAGE_NAME = env.STAGE_NAME
 }
 
