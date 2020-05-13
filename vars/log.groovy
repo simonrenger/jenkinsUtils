@@ -35,3 +35,11 @@ def info(message){
 def parse(projectRulePath = 'msbuildparserules.txt',parsingRulesPath = 'msbuildparserules.txt',showGraphs = true){
     logParser(projectRulePath:projectRulePath, parsingRulesPath: parsingRulesPath , showGraphs: showGraphs, useProjectRule: true)
 }
+
+def this(){
+    env.GLOBAL_STAGE_NAME = env.STAGE_NAME
+}
+
+def lastStage(){
+    return env.GLOBAL_STAGE_NAME
+}
