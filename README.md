@@ -28,7 +28,7 @@ notifes a discord webhook about a new review. Will indicate if its a new or an u
 
 `notifReviewFailed REVIEW_URL, WEBHOOK [, description = ""]`
 
-notifes a discord webhook about that a review faild
+notifes a discord webhook about that a review faild. _If `log.me()` has been used the posed message will display the last logged stage!_
 
 `notifReviewSuccess REVIEW_URL, WEBHOOK [, description = ""]`
 
@@ -36,7 +36,7 @@ notifes a discord webhook about that a review sucessed
 
 `notifFailed change_URL, WEBHOOK [, description = ""]`
 
-notifes a discord webhook about that a build faild
+notifes a discord webhook about that a build faild. _If `log.me()` has been used the posed message will display the last logged stage!_
 
 `notifSuccess change_URL, WEBHOOK [, description = ""]`
 
@@ -139,6 +139,14 @@ logs an info
 `log.setup(rulefile = 'msbuildparserules.txt', rules = null)`
 
 In case you wanted to parse the log, the [Log Parser Plugin](https://plugins.jenkins.io/log-parser/) needs a config file. the call `log.setup()` creates such for you. If you do not provide an argument the default name for the file is `rulefile = 'msbuildparserules.txt'`. If no rules are provied it uses the default rules.
+
+`log.me()`
+Will keep track of the current stage globally. This can be accessed with `log.lastStage()` or `env.GLOBAL_STAGE_NAME`
+
+`log.lastStage()`
+Will return the value of the last tracked stage with `log.me()` or changed value of `env.GLOBAL_STAGE_NAME`
+
+*Note*: Is being used in `notifFailed` and `notifReviewFailed` if `log.me()` has been used.
 
 *Default rules:*
 ```
