@@ -5,7 +5,7 @@ description = ""
 ){
     def build_stage = ""
     if(log.lastStage() != null){
-        build_stage = "Build Stage: ${log.lastStage()}\n"
+        build_stage = "Build Stage: **${log.lastStage()}**\n"
     }
     discord.send(
              discord.createMessage(":x: Build #${env.BUILD_NUMBER} - Last Perforce Revision: ${env.P4_CHANGELIST} Failed Building","failed",[
