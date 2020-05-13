@@ -230,6 +230,10 @@ def getCurrentChangelistDescription(credential,client,view_mapping){
     return getChangelistDescription(reviewId,credential,client,view_mapping)
 }
 
-def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}"){
-    p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
+def pull(credential,workspace_template,format = "jenkins-${JOB_NAME}",forceClean=true){
+    if(forceClean){
+        p4sync charset: 'none', credential:credential, format: format, populate: forceClean(have: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true), source: templateSource(workspace_template)
+    }else{
+        p4sync charset: 'none', credential:credential, format: format,  populate: autoClean(delete: true, modtime: false, parallel: [enable: true, minbytes: '1024', minfiles: '1', threads: '4'], pin: '', quiet: true, replace: true, tidy: true), source: templateSource(workspace_template)
+    }
 }
