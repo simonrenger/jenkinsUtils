@@ -13,6 +13,11 @@ def pack(ue4_dir,project,platform,config,output_dir,logDir = "${env.WORKSPACE}\\
     bat label: 'Exec Package', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\RunUAT.bat\" BuildCookRun -project=\"${project}\" -noP4 -Distribution -TargetPlatform=${platform} -Platform=${platform} -ClientConfig=${config} -ServerConfig=${config} -Cook -allmaps -Build -Stage -Pak -Archive -archivedirectory=\"${output_dir}\" -Rocket -Prereqs -Package -log=\"${logDir}\""
 }
 
+def cook(ue4_dir,project,platform,config,output_dir){
+    echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\nOutput directory: ${output_dir}"
+    bat label: 'Exec Package', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\RunUAT.bat\" BuildCookRun -project=\"${project}\" -noP4 -Distribution -TargetPlatform=${platform} -Platform=${platform} -ClientConfig=${config} -ServerConfig=${config} -Cook -allmaps -Stage -Pak -Archive -archivedirectory=\"${output_dir}\" -Rocket -Prereqs"
+}
+
 def build(ue4_dir,project,project_name,platform,config,output_dir,logDir = "${env.WORKSPACE}\\ue4_pack_log_${env.BUILD_NUMBER}.log"){
     echo "Settings:\nProject: ${project}\nPlatform: ${platform}\nConfig: ${config}\nOutput directory: ${output_dir}"
     bat label: 'UnrealBuildTool', script: "CALL \"${ue4_dir}Engine\\Binaries\\DotNET\\UnrealBuildTool.exe\" -projectfiles -project=\"${project}\" -game -rocket -progress -2019 -log=\"${logDir}\" -Platforms=${platform} PrecompileForTargets = PrecompileTargetsType.Any;"
