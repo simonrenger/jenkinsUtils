@@ -12,6 +12,10 @@ A collection of useful `groovy` functions for our Unreal Engine 4 Project with P
 
 **See examples**: [Example folder](https://github.com/simonrenger/jenkinsUtils/tree/master/examples)
 
+## Motivation
+
+This collection was written because I had no access to the underlaying Build & Test Server therefore I could not install certain plugins. I needed a discord and ue4 integration. *This project is a learning project to learn groovy scripting for jenkins*. Any feedback is welcome.
+
 ## White list requirements
 
 Please white list the following in your jenkins: *https://jenkins-domain/scriptApproval/*
