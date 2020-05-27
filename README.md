@@ -608,6 +608,21 @@ or multiple tests
 
 `ue4.runTests(PROJECT,"TEST_CheckDamage,TEST_CheckBlessing")`
 
+`ue4.runTestFile(project_name,project_path,testFilePath[,platform = "Win64",config = "Development"])`
+
+Will parse a json file with the following format:
+
+```json
+[
+    "TEST_A",
+    "TEST_B",
+    "TEST_C"
+    ...
+]
+```
+
+and call the function `ue4.runTests` internally to execute all tests.
+
 `ue4.runFilteredTests(project,filter[,platform = "Win64",config = "Development"])`
 Runs filtered tests: 
 - Engine
