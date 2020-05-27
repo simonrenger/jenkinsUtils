@@ -1,3 +1,6 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 def engineRoot = ""
 
 def setRoot(root){
@@ -55,6 +58,15 @@ echo "Ensure the Editor version of the game has been build..."
 bat label: 'Build', script: "CALL \"${ue4_dir}Engine\\Build\\BatchFiles\\Build.bat\" ${project_name}Editor ${platform} ${config} \"${project}\""
 echo "Run all tests..."
 bat label: 'run all tests', script:"CALL \"${engineRoot}\\Engine\\Binaries\\${platform}\\UE4Editor-Cmd.exe\" \"${project}\" -buildmachine -stdout -fullstdoutlogoutput -forcelogflush -unattended  -nosound  -nopause -nullrhi -nosplash -ExecCmds=\"automation RunAll;quit\""
+}
+
+def runTestFile(project_name,project_path,testFilePath,platform = "Win64",config = "Development"){
+    // load file
+    def content = readFile file: testFilePath
+    def jsonSlurper = new JsonSlurper()
+    def tests = jsonSlurper.parseText(content)
+    tests = tests.join(",")
+    runTests(project_name,project_path,tests,platform,config)
 }
 
 def runTests(project_name,project_path,tests,platform = "Win64",config = "Development"){
