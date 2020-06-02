@@ -8,6 +8,7 @@ start /COOK COMMAND/
 # Compiler Error
 error /(?i)error [A-Z]+[0-9]+:/
 error /(?i)Error:/
+error /(?i)LogAutomationController: Error: Automation Test Failed/
 # Compiler Warning
 warning /(?i)warning [A-Z]+[0-9]+:/
 warning /(?i)Warning:/
