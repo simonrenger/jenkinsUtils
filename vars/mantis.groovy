@@ -40,3 +40,19 @@ def body = [
     --header \"Content-Type: application/json\" ^
     --data-raw \"${bodyJson}\""""
 }
+
+def add_version(projectId,version,description = null,released = false,obsolete = false){
+    
+    def body = [
+        name:version,
+        description:description,
+        released:released,
+        obsolete:obsolete
+    ]
+
+    def bodyJson = JsonOutput.toJson(body).replace('"','""')
+    bat label: '', script: """curl --location --request PATCH \"${url_}/api/rest/projects/${projectId}/versions/\"^
+    --header \"Authorization: ${token_}\"^
+    --header \"Content-Type: application/json\" ^
+    --data-raw \"${bodyJson}\""""
+}
