@@ -578,9 +578,13 @@ returns the engine root directory
 
 Will build the engine. The project parameter needs to contain `.uproject`. Might change. The project name is *just* the project name.
 
-`ue4.pack(ue4_dir,project,platform,config,output_dir)`
+`ue4.pack(ue4_dir,project,platform,config,output_dir[,extra_args=null])`
 
-Will cook and package the engine. The project parameter needs to contain `.uproject`. Might change.
+Will cook and package the engine. The project parameter needs to contain `.uproject`. **Might change.** `extra_args` will allow you to pass some extra arguments to `RunUAT.bat BuildCookRun`.
+
+`ue4.cook(ue4_dir,project,platform,config,output_dir[,extra_args=null])`
+
+Will cook the current project. The project parameter needs to contain `.uproject`. **Might change.** `extra_args` will allow you to pass some extra arguments to `RunUAT.bat BuildCookRun`.
 
 
 `ue4.listTests(project,platform[,config = "Development"])`
@@ -589,15 +593,15 @@ Will return a list of all tests. Might be buggy and slow.
 
 **Important**: `setRoot` needs to be called before you can use this function!
 
-`ue4.runAllTests(project[,platform = "Win64",config = "Development"])`
+`ue4.runAllTests(project[,platform = "Win64",config = "Development",extra_args=null])`
 
-Will run all tests of the given project. The project parameter needs to contain the `.uproject`.
+Will run all tests of the given project. The project parameter needs to contain the `.uproject`. `extra_args` will allow you to pass some extra arguments to the running engine. `UE4Editor-Cmd.exe`
 
 **Important**: `setRoot` needs to be called before you can use this function!
 
-`ue4.runTests(project,tests[,platform = "Win64",config = "Development"])`
+`ue4.runTests(project,tests[,platform = "Win64",config = "Development",extra_args=null])`
 
-Runs one or multiple tests. The tests need to be seperated by a `,`! The project  parameter needs to contain the `.uproject`.
+Runs one or multiple tests. The tests need to be seperated by a `,`! The project  parameter needs to contain the `.uproject`. `extra_args` will allow you to pass some extra arguments to the running engine. `UE4Editor-Cmd.exe`
 
 **Important**: `setRoot` needs to be called before you can use this function!
 
@@ -608,7 +612,7 @@ or multiple tests
 
 `ue4.runTests(PROJECT,"TEST_CheckDamage,TEST_CheckBlessing")`
 
-`ue4.runTestFile(project_name,project_path,testFilePath[,platform = "Win64",config = "Development"])`
+`ue4.runTestFile(project_name,project_path,testFilePath[,platform = "Win64",config = "Development",extra_args=null])`
 
 Will parse a json file with the following format:
 
@@ -621,9 +625,9 @@ Will parse a json file with the following format:
 ]
 ```
 
-and call the function `ue4.runTests` internally to execute all tests.
+and call the function `ue4.runTests` internally to execute all tests. `extra_args` will allow you to pass some extra arguments to the running engine. `UE4Editor-Cmd.exe`
 
-`ue4.runFilteredTests(project,filter[,platform = "Win64",config = "Development"])`
+`ue4.runFilteredTests(project,filter[,platform = "Win64",config = "Development",extra_args=null])`
 Runs filtered tests: 
 - Engine
 - Smoke
@@ -639,6 +643,8 @@ script{
     ue4.runFilteredTests(PROJECT,"smoke",PLATFORM)
 }
 ```
+
+ `extra_args` will allow you to pass some extra arguments to the running engine. `UE4Editor-Cmd.exe`
 
 ## unity functions
 
