@@ -76,14 +76,14 @@ def runTestFile(project_name,project_path,testFilePath,platform = "Win64",config
     def content = readFile file: testFilePath
     def jsonSlurper = new JsonSlurper()
     def tests = jsonSlurper.parseText(content)
-    tests = tests.join(",")
+    tests = tests['tests'].join(",")
     runTests(project_name,project_path,tests,platform,config,extra_args)
 }
 
 def runTests(project_name,project_path,tests,platform = "Win64",config = "Development",extra_args = null){
 def project = createProjectVar(project_name,project_path)
 def testStr = ""
-def testsSplit = tests['tests'].split(",")
+def testsSplit = tests.split(",")
 if(testsSplit.length == 0){
     testStr = tests
 }else{
