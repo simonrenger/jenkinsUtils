@@ -83,7 +83,7 @@ def runTestFile(project_name,project_path,testFilePath,platform = "Win64",config
 def runTests(project_name,project_path,tests,platform = "Win64",config = "Development",extra_args = null){
 def project = createProjectVar(project_name,project_path)
 def testStr = ""
-def testsSplit = tests.split(",")
+def testsSplit = tests['tests'].split(",")
 if(testsSplit.length == 0){
     testStr = tests
 }else{
