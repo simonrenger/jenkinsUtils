@@ -80,8 +80,7 @@ def runTestFile(project_name,project_path,testFilePath,platform = "Win64",config
     testsJson['tests'].each{ value -> 
       tests += value+"," 
     }
-    echo tests
-    //runTests(project_name,project_path,tests,platform,config,extra_args)
+    runTests(project_name,project_path,tests,platform,config,extra_args)
 }
 
 def runTests(project_name,project_path,tests,platform = "Win64",config = "Development",extra_args = null){
