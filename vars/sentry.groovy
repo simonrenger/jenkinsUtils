@@ -7,7 +7,7 @@ def upload(
     project,
     folder){
 
-def sourceDir = "${env.WORKSPACE}\\sentry\\"
+def sourceDir = "${env.WORKSPACE}\\"
 
 if(!fileExists("${sourceDir}sentry-cli-Windows-x86_64.exe")){
      download("https://github.com/getsentry/sentry-cli/releases/download/1.53.0/sentry-cli-Windows-x86_64.exe","${sourceDir}sentry-cli-Windows-x86_64.exe")
