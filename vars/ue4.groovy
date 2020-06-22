@@ -76,7 +76,7 @@ def runTestFile(project_name,project_path,testFilePath,platform = "Win64",config
     def content = readFile file: testFilePath
     def jsonSlurper = new JsonSlurper()
     def testsJson = jsonSlurper.parseText(content)
-    def tests = ""
+    def tests = []
     testsJson['tests'].each{ value -> 
       tests += value+"," 
     }
