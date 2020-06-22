@@ -1,12 +1,6 @@
 // .\sentry-cli-Windows-x86_64.exe --url http://sentry.zsinfo.nl:9000/ --auth-token 64c90a3f9d3a493d848933447b10bbe3490b5be041ae4799a1ac20133bac852d upload-dif -o management -p managment ./Kari
 
-def sentry__ = [
-    token:null,
-    url:null,
-    org:null,
-    project:null,
-    app_path:null
-    ]
+def sentry__ = null
 
 def setUp(
     sourceDir = "..\\",
@@ -16,6 +10,15 @@ def setUp(
     url = null,
     token = null
 ){
+
+    sentry__ = [
+    token:null,
+    url:null,
+    org:null,
+    project:null,
+    app_path:null
+    ]
+
     if(url != null)
     {
       sentry__.url = url  
